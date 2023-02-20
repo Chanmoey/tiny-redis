@@ -9,4 +9,8 @@ package com.moon.tinyredis.resp.reply;
 public interface Reply {
 
     byte[] toBytes();
+
+    default boolean isErrorReply(Reply reply) {
+        return reply.toBytes()[0] == '-';
+    }
 }
