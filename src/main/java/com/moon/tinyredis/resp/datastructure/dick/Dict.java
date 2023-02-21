@@ -8,7 +8,7 @@ import java.util.function.BiConsumer;
  * @author Chanmoey
  * @date 2023年02月21日
  */
-public interface Dick {
+public interface Dict {
 
     Value get(String key);
 
