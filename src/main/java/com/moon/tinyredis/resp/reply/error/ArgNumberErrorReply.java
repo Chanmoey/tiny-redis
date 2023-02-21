@@ -20,4 +20,8 @@ public class ArgNumberErrorReply extends AbstractErrorReplay{
         return ("-Err wrong number of arguments for '" + cmd + "' command\r\n")
                 .getBytes(StandardCharsets.UTF_8);
     }
+
+    public static ArgNumberErrorReply makeArgNumberErrorReply(String cmd) {
+        return new ArgNumberErrorReply(cmd);
+    }
 }

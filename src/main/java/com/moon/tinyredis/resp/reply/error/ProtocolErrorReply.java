@@ -20,4 +20,8 @@ public class ProtocolErrorReply extends AbstractErrorReplay{
         return ("-Err Protocol error: '" + msg + "'\r\n")
                 .getBytes(StandardCharsets.UTF_8);
     }
+
+    public static ProtocolErrorReply makeProtocolErrorReply(String msg) {
+        return new ProtocolErrorReply(msg);
+    }
 }

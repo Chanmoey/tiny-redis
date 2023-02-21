@@ -6,7 +6,9 @@ import java.nio.charset.StandardCharsets;
  * @author Chanmoey
  * @date 2023年02月20日
  */
-public class UnknownErrorReply extends AbstractErrorReplay{
+public class UnknownErrorReply extends AbstractErrorReplay {
+
+    private static final UnknownErrorReply INSTANCE = new UnknownErrorReply();
 
     UnknownErrorReply() {
         super(" Unknown Err");
@@ -17,5 +19,9 @@ public class UnknownErrorReply extends AbstractErrorReplay{
     @Override
     public byte[] toBytes() {
         return UNKNOWN_ERROR_BYTES;
+    }
+
+    public static UnknownErrorReply makeUnknownErrorReply() {
+        return INSTANCE;
     }
 }

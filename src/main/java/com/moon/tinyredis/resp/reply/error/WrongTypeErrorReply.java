@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class WrongTypeErrorReply extends AbstractErrorReplay{
 
+    private static final WrongTypeErrorReply INSTANCE = new WrongTypeErrorReply();
+
     WrongTypeErrorReply() {
         super("Wrong Type Err");
     }
@@ -17,5 +19,9 @@ public class WrongTypeErrorReply extends AbstractErrorReplay{
     @Override
     public byte[] toBytes() {
         return UNKNOWN_ERROR_BYTES;
+    }
+
+    public static WrongTypeErrorReply makeWrongTypeErrorReply() {
+        return INSTANCE;
     }
 }

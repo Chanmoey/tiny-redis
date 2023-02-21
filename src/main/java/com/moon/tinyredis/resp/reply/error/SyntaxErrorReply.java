@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class SyntaxErrorReply extends AbstractErrorReplay{
 
+    private static final SyntaxErrorReply INSTANCE = new SyntaxErrorReply();
+
     SyntaxErrorReply() {
         super("Syntax Err");
     }
@@ -17,5 +19,9 @@ public class SyntaxErrorReply extends AbstractErrorReplay{
     @Override
     public byte[] toBytes() {
         return UNKNOWN_ERROR_BYTES;
+    }
+
+    public static SyntaxErrorReply makeSyntaxErrorReply() {
+        return INSTANCE;
     }
 }
