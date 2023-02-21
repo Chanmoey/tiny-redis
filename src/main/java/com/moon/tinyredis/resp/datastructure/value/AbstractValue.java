@@ -1,4 +1,4 @@
-package com.moon.tinyredis.resp.datastructure;
+package com.moon.tinyredis.resp.datastructure.value;
 
 /**
  * @author Chanmoey
