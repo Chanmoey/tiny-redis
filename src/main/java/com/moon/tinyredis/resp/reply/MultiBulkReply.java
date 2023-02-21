@@ -23,11 +23,11 @@ public class MultiBulkReply implements Reply {
         int argLen = args.length;
 
         StringBuilder sb = new StringBuilder();
-        sb.append("*").append(argLen).append(Constant.CRLF);
+        sb.append("*").append(argLen).append(RespConstant.CRLF);
 
         for (byte[] arg : args) {
             if (arg == null) {
-                sb.append(Arrays.toString(NullBulkReply.makeOkReplay().toBytes())).append(Constant.CRLF);
+                sb.append(Arrays.toString(NullBulkReply.makeOkReplay().toBytes())).append(RespConstant.CRLF);
             } else {
                 sb.append(Arrays.toString(BulkReply.makeBulkReply(arg).toBytes()));
             }

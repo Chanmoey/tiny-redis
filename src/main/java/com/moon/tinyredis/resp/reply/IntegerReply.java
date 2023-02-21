@@ -16,7 +16,7 @@ public class IntegerReply implements Reply {
 
     @Override
     public byte[] toBytes() {
-        return (":" + number + Constant.CRLF).getBytes(StandardCharsets.UTF_8);
+        return (":" + number + RespConstant.CRLF).getBytes(StandardCharsets.UTF_8);
     }
 
     public static IntegerReply makeStatusReply(int number) {

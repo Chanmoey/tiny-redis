@@ -16,7 +16,7 @@ public class StandardErrorReply implements Reply {
 
     @Override
     public byte[] toBytes() {
-        return ("-" + status + Constant.CRLF).getBytes(StandardCharsets.UTF_8);
+        return ("-" + status + RespConstant.CRLF).getBytes(StandardCharsets.UTF_8);
     }
 
     public static StandardErrorReply makeStatusReply(String status) {

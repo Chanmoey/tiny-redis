@@ -28,7 +28,7 @@ public class BulkReply implements Reply {
             return EmptyBulkReply.makeEmptyMultiBuckReply().toBytes();
         }
 
-        return ("$" + arg.length + Constant.CRLF + new String(arg) + Constant.CRLF)
+        return ("$" + arg.length + RespConstant.CRLF + new String(arg) + RespConstant.CRLF)
                 .getBytes(StandardCharsets.UTF_8);
     }
 
