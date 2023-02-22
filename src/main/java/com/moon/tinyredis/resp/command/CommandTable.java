@@ -36,5 +36,6 @@ public class CommandTable {
         commandTable.register("del", new Del(-1));
         commandTable.register("exists", new Del(-1));
         commandTable.register("flushdb", new Del(0));
+        commandTable.register("type", new Del(1));
     }
 }
