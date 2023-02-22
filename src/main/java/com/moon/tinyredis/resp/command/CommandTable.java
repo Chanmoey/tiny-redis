@@ -1,5 +1,6 @@
 package com.moon.tinyredis.resp.command;
 
+import com.moon.tinyredis.resp.command.keys.Del;
 import com.moon.tinyredis.resp.command.ping.Ping;
 
 import java.util.HashMap;
@@ -32,5 +33,6 @@ public class CommandTable {
     public static void initTable() {
         CommandTable commandTable = CommandTable.getCommandTable();
         commandTable.register("ping", new Ping(0));
+        commandTable.register("del", new Del(-1));
     }
 }
