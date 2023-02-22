@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
  * @author Chanmoey
  * @date 2023年02月22日
  */
-public abstract class AbstractResp<T> extends Resp<T> implements RespCodec<T> {
+public abstract class AbstractDecode<T> extends Resp<T> implements RespCodec<T> {
     @Override
     public abstract Resp<T> decode(ByteBuf buffer);
 
