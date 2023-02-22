@@ -39,5 +39,7 @@ public class CommandTable {
         commandTable.register("type", new Type(1));
         commandTable.register("rename", new Rename(2));
         commandTable.register("renamenx", new RenameNX(2));
+        commandTable.register("keys", new Keys(1));
+
     }
 }
