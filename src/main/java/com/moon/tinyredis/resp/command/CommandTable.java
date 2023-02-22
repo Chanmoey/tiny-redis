@@ -35,5 +35,6 @@ public class CommandTable {
         commandTable.register("ping", new Ping(0));
         commandTable.register("del", new Del(-1));
         commandTable.register("exists", new Del(-1));
+        commandTable.register("flushdb", new Del(0));
     }
 }
