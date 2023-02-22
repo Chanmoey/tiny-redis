@@ -1,5 +1,6 @@
 package com.moon.tinyredis.resp.command;
 
+import com.moon.tinyredis.resp.database.DB;
 import com.moon.tinyredis.resp.reply.Reply;
 
 /**
@@ -13,5 +14,9 @@ public abstract class Command {
      */
     protected int arity;
 
-    abstract Reply exec(byte[][] args);
+    public abstract Reply exec(DB db, byte[][] args);
+
+    public boolean validateArity(byte[][] args) {
+        return args.length == arity;
+    }
 }

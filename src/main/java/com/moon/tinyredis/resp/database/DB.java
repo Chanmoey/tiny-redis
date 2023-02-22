@@ -5,7 +5,11 @@ import com.moon.tinyredis.resp.codec.CommandLine;
 import com.moon.tinyredis.resp.command.Command;
 import com.moon.tinyredis.resp.command.CommandTable;
 import com.moon.tinyredis.resp.datastructure.dick.Dict;
-import com.moon.tinyredis.resp.reply.error.ErrorReply;
+import com.moon.tinyredis.resp.datastructure.dick.HashDict;
+import com.moon.tinyredis.resp.reply.Reply;
+import com.moon.tinyredis.resp.reply.error.ArgNumberErrorReply;
+import com.moon.tinyredis.resp.reply.error.CommonErrorReply;
+import io.netty.channel.Channel;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
@@ -25,19 +29,39 @@ public class DB {
 
     private Dict data;
 
-    public DB(int index, Dict data) {
-        this.index = index;
-        this.data = data;
+    public Dict getDict() {
+        return data;
     }
 
+    public DB(int index) {
+        this.index = index;
+        this.data = new HashDict();
+    }
+
+    /**
+     * 当前线程不是Netty的线程，所以调用channel的writeAndFlush会作为一个task插入到Netty的线程池中去
+     * 所以不去要额外求开辟一个线程，单独提交write的任务
+     * <p>
+     * 如果不是这样，网络IO相关的事件和其他业务事件要分开，不要让业务阻塞了Netty的网络IO，造成延迟
+     */
     private void execCommand(Connection connection, CommandLine commandLine) {
         EXECUTOR.execute(() -> {
+            Channel channel = connection.getChannel();
             String commandName = new String(commandLine.getCommand(), StandardCharsets.UTF_8);
             Command command = COMMAND_TABLE.getCommand(commandName);
             if (command == null) {
-                connection.getChannel().writeAndFlush((ErrorReply.);
+                channel.writeAndFlush(CommonErrorReply
+                        .makeCommonErrorReply("Err unknown command " + commandName).toBytes());
+                return;
             }
+            if (!command.validateArity(commandLine.getArgs())) {
+                channel.writeAndFlush(ArgNumberErrorReply.makeArgNumberErrorReply(commandName).toBytes());
+                return;
+            }
+            Reply res = command.exec(this, commandLine.getArgs());
+            channel.writeAndFlush(res.toBytes());
 
+            // TODO: AOF刷盘
         });
     }
 }
