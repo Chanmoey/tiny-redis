@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class RenameNX extends Command {
 
-    protected RenameNX(int arity) {
+    public RenameNX(int arity) {
         super(arity);
     }
 
