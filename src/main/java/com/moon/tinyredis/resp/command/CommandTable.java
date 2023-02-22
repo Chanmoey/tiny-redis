@@ -34,5 +34,6 @@ public class CommandTable {
         CommandTable commandTable = CommandTable.getCommandTable();
         commandTable.register("ping", new Ping(0));
         commandTable.register("del", new Del(-1));
+        commandTable.register("exists", new Del(-1));
     }
 }
