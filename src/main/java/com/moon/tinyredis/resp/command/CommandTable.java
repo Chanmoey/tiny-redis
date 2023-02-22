@@ -38,5 +38,6 @@ public class CommandTable {
         commandTable.register("flushdb", new FlushDB(0));
         commandTable.register("type", new Type(1));
         commandTable.register("rename", new Rename(2));
+        commandTable.register("renamenx", new Rename(2));
     }
 }
