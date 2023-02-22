@@ -14,7 +14,7 @@ public class CommandTable {
         return INSTANCE;
     }
 
-    private HashMap<String, Command> map = new HashMap<>();
+    private final HashMap<String, Command> map = new HashMap<>();
 
     public void register(String key, Command command) {
         // 统一转小写，避免大小写匹配失败
@@ -25,5 +25,10 @@ public class CommandTable {
     public Command getCommand(String key) {
         key = key.toLowerCase();
         return map.get(key);
+    }
+
+    public static void initTable() {
+        CommandTable commandTable = CommandTable.getCommandTable();
+        commandTable.register("ping", new Ping(0));
     }
 }

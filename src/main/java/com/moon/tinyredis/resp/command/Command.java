@@ -14,6 +14,10 @@ public abstract class Command {
      */
     protected int arity;
 
+    protected Command(int arity) {
+        this.arity = arity;
+    }
+
     public abstract Reply exec(DB db, byte[][] args);
 
     public boolean validateArity(byte[][] args) {
