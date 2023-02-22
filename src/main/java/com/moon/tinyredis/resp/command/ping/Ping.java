@@ -1,5 +1,6 @@
-package com.moon.tinyredis.resp.command;
+package com.moon.tinyredis.resp.command.ping;
 
+import com.moon.tinyredis.resp.command.Command;
 import com.moon.tinyredis.resp.database.DB;
 import com.moon.tinyredis.resp.reply.Reply;
 import com.moon.tinyredis.resp.reply.constant.PongReply;
@@ -8,9 +9,9 @@ import com.moon.tinyredis.resp.reply.constant.PongReply;
  * @author Chanmoey
  * @date 2023年02月22日
  */
-public class Ping extends Command{
+public class Ping extends Command {
 
-    protected Ping(int arity) {
+    public Ping(int arity) {
         super(arity);
     }
 

@@ -1,5 +1,7 @@
 package com.moon.tinyredis.resp.command;
 
+import com.moon.tinyredis.resp.command.ping.Ping;
+
 import java.util.HashMap;
 
 /**
