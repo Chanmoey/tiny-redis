@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class RespConstant {
 
+    public static final byte CR = '\r';
+
     private RespConstant(){}
 
     public static final byte[] SIMPLE = "+".getBytes();
