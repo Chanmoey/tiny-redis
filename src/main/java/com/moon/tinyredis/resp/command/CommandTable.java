@@ -1,6 +1,9 @@
 package com.moon.tinyredis.resp.command;
 
 import com.moon.tinyredis.resp.command.keys.Del;
+import com.moon.tinyredis.resp.command.keys.Exists;
+import com.moon.tinyredis.resp.command.keys.FlushDB;
+import com.moon.tinyredis.resp.command.keys.Type;
 import com.moon.tinyredis.resp.command.ping.Ping;
 
 import java.util.HashMap;
@@ -34,8 +37,8 @@ public class CommandTable {
         CommandTable commandTable = CommandTable.getCommandTable();
         commandTable.register("ping", new Ping(0));
         commandTable.register("del", new Del(-1));
-        commandTable.register("exists", new Del(-1));
-        commandTable.register("flushdb", new Del(0));
-        commandTable.register("type", new Del(1));
+        commandTable.register("exists", new Exists(-1));
+        commandTable.register("flushdb", new FlushDB(0));
+        commandTable.register("type", new Type(1));
     }
 }
