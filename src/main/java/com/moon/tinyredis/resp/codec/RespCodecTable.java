@@ -1,6 +1,5 @@
 package com.moon.tinyredis.resp.codec;
 
-import com.moon.tinyredis.resp.reply.RespConstant;
 import io.netty.buffer.ByteBuf;
 
 import java.util.HashMap;
