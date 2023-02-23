@@ -7,11 +7,11 @@ import java.util.Arrays;
  * @date 2023年02月22日
  */
 public enum RespType {
-    SIMPLE_STRING((byte) '+'),
+    OK((byte) '+'),
     ERROR((byte) '-'),
     INTEGER((byte) ':'),
-    MULTI_BULK((byte) '$'),
-    ARRAY((byte) '*');
+    BULK((byte) '$'),
+    MULTI_BULK((byte) '*');
 
     private final byte flag;
 
