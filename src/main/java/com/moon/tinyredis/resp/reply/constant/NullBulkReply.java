@@ -3,8 +3,6 @@ package com.moon.tinyredis.resp.reply.constant;
 import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.reply.Reply;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author Chanmoey
  * @date 2023年02月20日
@@ -20,7 +18,7 @@ public class NullBulkReply implements Reply {
         return NULL_BULK_BYTES;
     }
 
-    public static NullBulkReply makeOkReplay() {
+    public static NullBulkReply makeNullBulkReply() {
         return INSTANCE;
     }
 }

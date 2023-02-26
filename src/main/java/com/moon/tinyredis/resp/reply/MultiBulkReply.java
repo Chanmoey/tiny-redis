@@ -3,7 +3,6 @@ package com.moon.tinyredis.resp.reply;
 import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.reply.constant.NullBulkReply;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -28,7 +27,7 @@ public class MultiBulkReply implements Reply {
 
         for (byte[] arg : args) {
             if (arg == null) {
-                sb.append(Arrays.toString(NullBulkReply.makeOkReplay().toBytes())).append(RespConstant.CRLF);
+                sb.append(Arrays.toString(NullBulkReply.makeNullBulkReply().toBytes())).append(RespConstant.CRLF);
             } else {
                 sb.append(Arrays.toString(BulkReply.makeBulkReply(arg).toBytes()));
             }

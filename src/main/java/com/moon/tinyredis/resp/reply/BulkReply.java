@@ -4,8 +4,6 @@ import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.reply.constant.EmptyBulkReply;
 import com.moon.tinyredis.resp.reply.constant.NullBulkReply;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author Chanmoey
  * @date 2023年02月20日
@@ -22,7 +20,7 @@ public class BulkReply implements Reply {
     public byte[] toBytes() {
 
         if (arg == null) {
-            return NullBulkReply.makeOkReplay().toBytes();
+            return NullBulkReply.makeNullBulkReply().toBytes();
         }
 
         if (arg.length == 0) {

@@ -1,10 +1,9 @@
 package com.moon.tinyredis.resp.parser;
 
 import com.moon.tinyredis.resp.config.SystemConfig;
-import com.moon.tinyredis.resp.reply.IntegerReply;
-import com.moon.tinyredis.resp.reply.Reply;
-import com.moon.tinyredis.resp.reply.RespConstant;
-import com.moon.tinyredis.resp.reply.StatusReply;
+import com.moon.tinyredis.resp.reply.*;
+import com.moon.tinyredis.resp.reply.constant.EmptyMultiBulkReply;
+import com.moon.tinyredis.resp.reply.constant.NullBulkReply;
 import com.moon.tinyredis.resp.reply.error.CommonErrorReply;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -12,7 +11,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.util.ByteProcessor;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -20,6 +18,10 @@ import java.util.List;
  * @date 2023年02月23日
  */
 public class Parser extends ByteToMessageDecoder {
+
+    public Parser(ReadState readState) {
+        this.readState = readState;
+    }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> list) throws Exception {
@@ -37,16 +39,76 @@ public class Parser extends ByteToMessageDecoder {
         // 读取完成后，记录索引
         byteBuf.markReaderIndex();
 
-        // TODO: 解析RESP, 重置readState
+        // 重置readState, 解析RESP
+        readState.resetState();
+        PayLoad payLoad = parser0(cache);
+
+        list.set(list.size(), payLoad);
     }
 
-    private ReadState readState;
+    private final ReadState readState;
 
     /**
      * 主要解析方法
      */
-    public Reply parser0(byte[] data) {
-        return null;
+    public PayLoad parser0(ByteBuf data) {
+        PayLoad payLoad = new PayLoad();
+        try {
+            byte[] msg = readLine(data);
+            /* 判断是不是多行解析模式 */
+            if (!readState.isReadingMultiLine()) {
+                // 发送'*'，解析头部，开启多行解析 *3\r\n
+                if (msg[0] == '*') {
+                    parseMultiBulkHeader(msg);
+                    // 数组长度为0，解析完成，重置readState，并返回解析结果
+                    if (readState.getExpectedArgsCount() == 0) {
+                        payLoad.setData(EmptyMultiBulkReply.makeEmptyMultiBuckReply());
+                        readState.resetState();
+                        return payLoad;
+                    }
+
+                    /*  发送'$'，解析头部，开启字符串的多行解析 */
+                } else if (msg[0] == '$') {
+                    // $4\r\nPING\r\n
+                    parseBulkHeader(msg);
+                    // $-1\r\n
+                    if (readState.getExpectedArgsCount() == 0) {
+                        payLoad.setData(NullBulkReply.makeNullBulkReply());
+                        readState.resetState();
+                        return payLoad;
+                    }
+
+                    /* 剩下的: + - 三种情况 */
+                } else {
+                    Reply reply = parseSingleLineReply(msg);
+                    payLoad.setData(reply);
+                    readState.resetState();
+                    return payLoad;
+                }
+
+                /* 多行模式 */
+            } else {
+                readBody(msg);
+                if (readState.finished()) {
+                    Reply result = null;
+                    if (readState.getMsgType() == RespConstant.MULTI_BULK) {
+                        result = MultiBulkReply.makeMultiBulkReply(readState.getArgs());
+                    } else if (readState.getMsgType() == RespConstant.BULK) {
+                        result = BulkReply.makeBulkReply(readState.getArgs()[0]);
+                    }
+                    payLoad.setData(result);
+                }
+                readState.resetState();
+                return payLoad;
+            }
+        } catch (Exception e) {
+            // 出错了，设置错误，等待下一步处理，并且初始化readState等待下一次IO
+            readState.resetState();
+            payLoad.setException((DecodeException) e);
+            return payLoad;
+        }
+        readState.resetState();
+        return payLoad;
     }
 
     /**
@@ -115,6 +177,28 @@ public class Parser extends ByteToMessageDecoder {
         }
     }
 
+    private void parseBulkHeader(byte[] msg) {
+        // 获取字符串长度，去掉$ \r \n
+        byte[] strLenBytes = new byte[msg.length - 3];
+        System.arraycopy(msg, 1, strLenBytes, 0, strLenBytes.length);
+        try {
+            int strLen = Integer.parseInt(new String(strLenBytes, SystemConfig.SYSTEM_CHARSET));
+            readState.setBulkLen(strLen);
+            if (readState.getBulkLen() == -1) {
+                readState.setExpectedArgsCount(0);
+            } else if (readState.getBulkLen() > 0) {
+                readState.setMsgType(msg[0]);
+                readState.setReadingMultiLine(true);
+                readState.setExpectedArgsCount(1);
+                readState.setArgs(new byte[1][]);
+            } else {
+                throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+            }
+        } catch (Exception e) {
+            throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+        }
+    }
+
     /**
      * +OK\r\n -err\r\n :5\r\n
      */
@@ -149,8 +233,19 @@ public class Parser extends ByteToMessageDecoder {
         if (line[0] == RespConstant.BULK) {
             byte[] numBytes = new byte[line.length - 1];
             System.arraycopy(line, 1, numBytes, 0, numBytes.length);
-            int strLen = Integer.parseInt(new String(numBytes, SystemConfig.SYSTEM_CHARSET));
-            
+            try {
+                int bulkLen = Integer.parseInt(new String(numBytes, SystemConfig.SYSTEM_CHARSET));
+
+                // $0\r\n
+                if (bulkLen <= 0) {
+                    readState.appendArg(new byte[]{});
+                    readState.setBulkLen(0);
+                }
+            } catch (Exception e) {
+                throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+            }
+        } else {
+            readState.appendArg(line);
         }
     }
 }

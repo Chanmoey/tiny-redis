@@ -14,11 +14,6 @@ public class PayLoad {
 
     private DecodeException exception;
 
-    public PayLoad(Reply data, DecodeException exception) {
-        this.data = data;
-        this.exception = exception;
-    }
-
     public Reply getData() {
         return data;
     }
