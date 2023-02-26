@@ -14,7 +14,7 @@ public class ReadState {
 
     private byte[][] args;
 
-    private long bulkLen;
+    private int bulkLen;
 
     private int readArgNum;
 
@@ -54,11 +54,11 @@ public class ReadState {
         this.args = args;
     }
 
-    public long getBulkLen() {
+    public int getBulkLen() {
         return bulkLen;
     }
 
-    public void setBulkLen(long bulkLen) {
+    public void setBulkLen(int bulkLen) {
         this.bulkLen = bulkLen;
     }
 

@@ -36,3 +36,12 @@ $12\r\nhello\r\nworld\r\n
 set key value
 
 *3\r\n$3\r\nset\r\n$3\r\nkey\r\n$5\r\nvalue\r\n
+
+### 自定义传输格式
+
+为了更加方便地解决TCP拆包粘包问题，在每次数据传输之前，添加4个Byte，也就是一个
+int(Integer)，来记录RESP数据的长度。
+
+
+所以Netty传输的数据格式就是：RESPLength + RESP。
+
