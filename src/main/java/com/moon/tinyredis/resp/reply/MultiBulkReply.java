@@ -27,9 +27,9 @@ public class MultiBulkReply implements Reply {
 
         for (byte[] arg : args) {
             if (arg == null) {
-                sb.append(Arrays.toString(NullBulkReply.makeNullBulkReply().toBytes())).append(RespConstant.CRLF);
+                sb.append(new String(NullBulkReply.makeNullBulkReply().toBytes()));
             } else {
-                sb.append(Arrays.toString(BulkReply.makeBulkReply(arg).toBytes()));
+                sb.append(new String(BulkReply.makeBulkReply(arg).toBytes()));
             }
         }
 

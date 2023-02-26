@@ -1,6 +1,7 @@
 package com.moon.tinyredis.resp.config;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Chanmoey
@@ -8,5 +9,5 @@ import java.nio.charset.Charset;
  */
 public class SystemConfig {
 
-    public static final Charset SYSTEM_CHARSET = SystemConfig.SYSTEM_CHARSET;
+    public static final Charset SYSTEM_CHARSET = StandardCharsets.UTF_8;
 }

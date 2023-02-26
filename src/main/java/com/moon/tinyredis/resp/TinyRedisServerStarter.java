@@ -1,5 +1,6 @@
 package com.moon.tinyredis.resp;
 
+import com.moon.tinyredis.resp.handler.CommandHandler;
 import com.moon.tinyredis.resp.parser.Parser;
 import com.moon.tinyredis.resp.parser.ReadState;
 import io.netty.bootstrap.ServerBootstrap;
@@ -40,11 +41,19 @@ public class TinyRedisServerStarter {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         // 解码器
                         ch.pipeline().addLast(new Parser(new ReadState()));
+                        // 指令中转器
+                        ch.pipeline().addLast(new CommandHandler());
                     }
                 });
     }
 
     public void start() {
-        this.server.bind();
+        this.server.bind(9736);
+    }
+
+    public static void main(String[] args) {
+        TinyRedisServerStarter starter = new TinyRedisServerStarter();
+        System.out.println("TinyRedis Server Start");
+        starter.start();
     }
 }

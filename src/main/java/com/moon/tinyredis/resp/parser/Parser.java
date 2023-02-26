@@ -25,6 +25,7 @@ public class Parser extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> list) throws Exception {
+
         if (byteBuf.readableBytes() < Message.BODY_LENGTH) {
             return;
         }
@@ -43,7 +44,7 @@ public class Parser extends ByteToMessageDecoder {
         readState.resetState();
         PayLoad payLoad = parser0(cache);
 
-        list.set(list.size(), payLoad);
+        list.add(payLoad);
     }
 
     private final ReadState readState;
