@@ -1,6 +1,6 @@
 package com.moon.tinyredis.resp.reply.error;
 
-import java.nio.charset.StandardCharsets;
+import com.moon.tinyredis.resp.config.SystemConfig;
 
 /**
  * @author Chanmoey
