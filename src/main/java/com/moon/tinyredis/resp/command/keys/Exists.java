@@ -1,6 +1,7 @@
 package com.moon.tinyredis.resp.command.keys;
 
 import com.moon.tinyredis.resp.command.Command;
+import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.database.DB;
 import com.moon.tinyredis.resp.reply.IntegerReply;
 import com.moon.tinyredis.resp.reply.Reply;
@@ -21,7 +22,7 @@ public class Exists extends Command {
     public Reply exec(DB db, byte[][] args) {
         int res = 0;
         for (byte[] arg : args) {
-            String key = new String(arg, StandardCharsets.UTF_8);
+            String key = new String(arg, SystemConfig.SYSTEM_CHARSET);
             if (db.getDict().get(key) != null) {
                 res++;
             }

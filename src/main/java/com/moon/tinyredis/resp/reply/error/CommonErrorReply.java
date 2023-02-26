@@ -17,7 +17,7 @@ public class CommonErrorReply extends AbstractErrorReplay {
 
     @Override
     public byte[] toBytes() {
-        return ("-" + errMsg + "\r\n").getBytes(StandardCharsets.UTF_8);
+        return ("-" + errMsg + "\r\n").getBytes(SystemConfig.SYSTEM_CHARSET);
     }
 
     public static CommonErrorReply makeCommonErrorReply(String errMsg) {

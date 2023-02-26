@@ -1,5 +1,7 @@
 package com.moon.tinyredis.resp.datastructure.value;
 
+import com.moon.tinyredis.resp.config.SystemConfig;
+
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -12,7 +14,7 @@ public class BulkValue extends AbstractValue{
 
     @Override
     public int hashCode() {
-        return new String(bulk, StandardCharsets.UTF_8).hashCode();
+        return new String(bulk, SystemConfig.SYSTEM_CHARSET).hashCode();
     }
 
     @Override

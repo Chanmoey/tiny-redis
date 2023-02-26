@@ -1,6 +1,7 @@
 package com.moon.tinyredis.resp.command.keys;
 
 import com.moon.tinyredis.resp.command.Command;
+import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.database.DB;
 import com.moon.tinyredis.resp.datastructure.value.BulkValue;
 import com.moon.tinyredis.resp.datastructure.value.Value;
@@ -22,7 +23,7 @@ public class Type extends Command {
 
     @Override
     public Reply exec(DB db, byte[][] args) {
-        String key = new String(args[0], StandardCharsets.UTF_8);
+        String key = new String(args[0], SystemConfig.SYSTEM_CHARSET);
         Value value = db.getDict().get(key);
         if (value == null) {
             return StatusReply.makeStatusReply("none");

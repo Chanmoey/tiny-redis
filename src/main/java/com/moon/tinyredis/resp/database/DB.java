@@ -1,9 +1,10 @@
 package com.moon.tinyredis.resp.database;
 
 import com.moon.tinyredis.resp.Connection;
-import com.moon.tinyredis.resp.codec.CommandLine;
 import com.moon.tinyredis.resp.command.Command;
+import com.moon.tinyredis.resp.command.CommandLine;
 import com.moon.tinyredis.resp.command.CommandTable;
+import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.datastructure.dick.Dict;
 import com.moon.tinyredis.resp.datastructure.dick.HashDict;
 import com.moon.tinyredis.resp.reply.Reply;
@@ -11,7 +12,6 @@ import com.moon.tinyredis.resp.reply.error.ArgNumberErrorReply;
 import com.moon.tinyredis.resp.reply.error.CommonErrorReply;
 import io.netty.channel.Channel;
 
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -47,7 +47,7 @@ public class DB {
     private void execCommand(Connection connection, CommandLine commandLine) {
         EXECUTOR.execute(() -> {
             Channel channel = connection.getChannel();
-            String commandName = new String(commandLine.getCommand(), StandardCharsets.UTF_8);
+            String commandName = new String(commandLine.getCommand(), SystemConfig.SYSTEM_CHARSET);
             Command command = COMMAND_TABLE.getCommand(commandName);
             if (command == null) {
                 channel.writeAndFlush(CommonErrorReply

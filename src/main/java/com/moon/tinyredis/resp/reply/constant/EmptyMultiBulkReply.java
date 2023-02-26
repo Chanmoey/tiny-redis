@@ -12,7 +12,7 @@ public class EmptyMultiBulkReply implements Reply {
 
     private static final EmptyMultiBulkReply INSTANCE = new EmptyMultiBulkReply();
 
-    private static final byte[] EMPTY_MULTI_BULK_BYTES = "*0\r\n".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] EMPTY_MULTI_BULK_BYTES = "*0\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
 
     @Override
     public byte[] toBytes() {

@@ -14,7 +14,7 @@ public class SyntaxErrorReply extends AbstractErrorReplay{
         super("Syntax Err");
     }
 
-    private static final byte[] UNKNOWN_ERROR_BYTES = "-Err syntax error\r\n".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] UNKNOWN_ERROR_BYTES = "-Err syntax error\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
 
     @Override
     public byte[] toBytes() {

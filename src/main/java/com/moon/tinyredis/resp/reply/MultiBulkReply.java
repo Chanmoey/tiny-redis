@@ -1,5 +1,6 @@
 package com.moon.tinyredis.resp.reply;
 
+import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.reply.constant.NullBulkReply;
 
 import java.nio.charset.StandardCharsets;
@@ -33,7 +34,7 @@ public class MultiBulkReply implements Reply {
             }
         }
 
-        return sb.toString().getBytes(StandardCharsets.UTF_8);
+        return sb.toString().getBytes(SystemConfig.SYSTEM_CHARSET);
     }
 
 

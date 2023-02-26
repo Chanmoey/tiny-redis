@@ -1,5 +1,7 @@
 package com.moon.tinyredis.resp.reply;
 
+import com.moon.tinyredis.resp.config.SystemConfig;
+
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -16,7 +18,7 @@ public class StatusReply implements Reply{
 
     @Override
     public byte[] toBytes() {
-        return ("+" + status + RespConstant.CRLF).getBytes(StandardCharsets.UTF_8);
+        return ("+" + status + RespConstant.CRLF).getBytes(SystemConfig.SYSTEM_CHARSET);
     }
 
     public static StatusReply makeStatusReply(String status) {

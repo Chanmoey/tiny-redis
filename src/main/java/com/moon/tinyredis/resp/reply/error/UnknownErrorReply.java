@@ -14,7 +14,7 @@ public class UnknownErrorReply extends AbstractErrorReplay {
         super(" Unknown Err");
     }
 
-    private static final byte[] UNKNOWN_ERROR_BYTES = "-Err unknown\r\n".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] UNKNOWN_ERROR_BYTES = "-Err unknown\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
 
     @Override
     public byte[] toBytes() {

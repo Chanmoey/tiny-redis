@@ -1,5 +1,6 @@
 package com.moon.tinyredis.resp.reply;
 
+import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.reply.constant.EmptyBulkReply;
 import com.moon.tinyredis.resp.reply.constant.NullBulkReply;
 
@@ -29,7 +30,7 @@ public class BulkReply implements Reply {
         }
 
         return ("$" + arg.length + RespConstant.CRLF + new String(arg) + RespConstant.CRLF)
-                .getBytes(StandardCharsets.UTF_8);
+                .getBytes(SystemConfig.SYSTEM_CHARSET);
     }
 
     public static BulkReply makeBulkReply(byte[] arg) {

@@ -1,6 +1,7 @@
 package com.moon.tinyredis.resp.command.keys;
 
 import com.moon.tinyredis.resp.command.Command;
+import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.database.DB;
 import com.moon.tinyredis.resp.datastructure.value.Value;
 import com.moon.tinyredis.resp.reply.IntegerReply;
@@ -22,10 +23,10 @@ public class RenameNX extends Command {
 
     @Override
     public Reply exec(DB db, byte[][] args) {
-        String oldKey = new String(args[0], StandardCharsets.UTF_8);
+        String oldKey = new String(args[0], SystemConfig.SYSTEM_CHARSET);
 
         // 看看key2存不存在
-        String newKey = new String(args[1], StandardCharsets.UTF_8);
+        String newKey = new String(args[1], SystemConfig.SYSTEM_CHARSET);
         Value v2 = db.getDict().get(newKey);
         if (v2 != null) {
             return IntegerReply.makeStatusReply(0);

@@ -18,7 +18,7 @@ public class ArgNumberErrorReply extends AbstractErrorReplay{
     @Override
     public byte[] toBytes() {
         return ("-Err wrong number of arguments for '" + cmd + "' command\r\n")
-                .getBytes(StandardCharsets.UTF_8);
+                .getBytes(SystemConfig.SYSTEM_CHARSET);
     }
 
     public static ArgNumberErrorReply makeArgNumberErrorReply(String cmd) {

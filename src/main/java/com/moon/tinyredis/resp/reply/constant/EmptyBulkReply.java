@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 public class EmptyBulkReply implements Reply {
     private static final EmptyBulkReply INSTANCE = new EmptyBulkReply();
 
-    private static final byte[] EMPTY_BULK_BYTES = "$0\r\n\r\n".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] EMPTY_BULK_BYTES = "$0\r\n\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
 
     @Override
     public byte[] toBytes() {

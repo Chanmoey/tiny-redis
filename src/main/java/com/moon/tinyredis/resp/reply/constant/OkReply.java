@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 public class OkReply implements Reply {
     private static final OkReply INSTANCE = new OkReply();
 
-    private static final byte[] OK_BYTES = "+OK\r\n".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] OK_BYTES = "+OK\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
 
     @Override
     public byte[] toBytes() {

@@ -18,7 +18,7 @@ public class ProtocolErrorReply extends AbstractErrorReplay{
     @Override
     public byte[] toBytes() {
         return ("-Err Protocol error: '" + msg + "'\r\n")
-                .getBytes(StandardCharsets.UTF_8);
+                .getBytes(SystemConfig.SYSTEM_CHARSET);
     }
 
     public static ProtocolErrorReply makeProtocolErrorReply(String msg) {

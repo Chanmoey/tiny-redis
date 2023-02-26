@@ -14,7 +14,7 @@ public class WrongTypeErrorReply extends AbstractErrorReplay{
         super("Wrong Type Err");
     }
 
-    private static final byte[] UNKNOWN_ERROR_BYTES = "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] UNKNOWN_ERROR_BYTES = "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
 
     @Override
     public byte[] toBytes() {
