@@ -146,7 +146,7 @@ public class Parser extends ByteToMessageDecoder {
             data.readBytes(msg);
             data.markReaderIndex();
             // 结尾必须是\r\n
-            if (msg[msg.length - 1] != '\r' || msg[msg.length - 2] != '\r') {
+            if (msg[msg.length - 1] != '\n' || msg[msg.length - 2] != '\r') {
                 throw new DecodeException(RespConstant.PROTOCOL_ERROR + "must end with \r\n");
             }
             readState.setBulkLen(0);

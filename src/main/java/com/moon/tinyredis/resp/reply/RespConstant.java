@@ -32,5 +32,5 @@ public class RespConstant {
     public static final String CRLF = "\r\n";
     public static final byte[] CRLF_BYTE = "\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
     
-    public static final String PROTOCOL_ERROR = "RespConstan.PROTOCOL_ERROR ";
+    public static final String PROTOCOL_ERROR = "protocol error: ";
 }
