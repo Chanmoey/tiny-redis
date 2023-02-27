@@ -2,15 +2,17 @@ package com.moon.tinyredis.resp.datastructure.value;
 
 import com.moon.tinyredis.resp.config.SystemConfig;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author Chanmoey
  * @date 2023年02月21日
  */
-public class BulkValue extends AbstractValue{
+public class BulkValue extends AbstractValue {
 
-    private byte[] bulk;
+    private final byte[] bulk;
+
+    public BulkValue(byte[] bulk) {
+        this.bulk = bulk;
+    }
 
     public byte[] getBulk() {
         return bulk;

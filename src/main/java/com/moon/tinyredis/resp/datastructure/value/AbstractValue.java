@@ -4,7 +4,7 @@ package com.moon.tinyredis.resp.datastructure.value;
  * @author Chanmoey
  * @date 2023年02月21日
  */
-public class AbstractValue {
+public class AbstractValue implements Value{
 
     protected long expireTime = -1;
 
