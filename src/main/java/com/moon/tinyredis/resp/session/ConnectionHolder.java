@@ -1,5 +1,6 @@
 package com.moon.tinyredis.resp.session;
 
+
 import io.netty.channel.Channel;
 
 import java.util.HashMap;
@@ -11,14 +12,20 @@ import java.util.Map;
  */
 public class ConnectionHolder {
 
-    private static final Map<Channel, Connection> connectionMap = new HashMap<>();
+    private ConnectionHolder(){}
+
+    private static final Map<Channel, Connection> CONNECTION_MAP = new HashMap<>();
 
     public static void put(Connection connection) {
-        connectionMap.put(connection.getChannel(), connection);
+        CONNECTION_MAP.put(connection.getChannel(), connection);
+    }
+
+    public static Connection get(Channel channel){
+        return CONNECTION_MAP.get(channel);
     }
 
     public static void close(Connection connection) {
         connection.close();
-        connectionMap.remove(connection.getChannel());
+        CONNECTION_MAP.remove(connection.getChannel());
     }
 }
