@@ -1,8 +1,11 @@
 package com.moon.tinyredis.resp.handler;
 
 import com.moon.tinyredis.resp.config.SystemConfig;
+import com.moon.tinyredis.resp.parser.Message;
 import com.moon.tinyredis.resp.parser.PayLoad;
 import com.moon.tinyredis.resp.reply.error.CommonErrorReply;
+import com.moon.tinyredis.resp.reply.error.ErrorReply;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -17,7 +20,9 @@ public class CommandHandler extends SimpleChannelInboundHandler<PayLoad> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, PayLoad msg) throws Exception {
         if (msg.getException() != null) {
-            ctx.writeAndFlush(CommonErrorReply.makeCommonErrorReply(msg.getException().getMessage()));
+            ErrorReply errorReply = CommonErrorReply.makeCommonErrorReply(msg.getException().getMessage());
+            ByteBuf errBuf = Message.makeMessage(errorReply);
+            ctx.writeAndFlush(errBuf);
             return;
         }
 

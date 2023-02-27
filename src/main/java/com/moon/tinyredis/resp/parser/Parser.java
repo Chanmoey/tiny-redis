@@ -54,59 +54,60 @@ public class Parser extends ByteToMessageDecoder {
      */
     public PayLoad parser0(ByteBuf data) {
         PayLoad payLoad = new PayLoad();
-        try {
-            byte[] msg = readLine(data);
-            /* 判断是不是多行解析模式 */
-            if (!readState.isReadingMultiLine()) {
-                // 发送'*'，解析头部，开启多行解析 *3\r\n
-                if (msg[0] == '*') {
-                    parseMultiBulkHeader(msg);
-                    // 数组长度为0，解析完成，重置readState，并返回解析结果
-                    if (readState.getExpectedArgsCount() == 0) {
-                        payLoad.setData(EmptyMultiBulkReply.makeEmptyMultiBuckReply());
+        while (data.readableBytes() > 0) {
+            try {
+                byte[] msg = readLine(data);
+                /* 判断是不是多行解析模式 */
+                if (!readState.isReadingMultiLine()) {
+                    // 发送'*'，解析头部，开启多行解析 *3\r\n
+                    if (msg[0] == '*') {
+                        parseMultiBulkHeader(msg);
+                        // 数组长度为0，解析完成，重置readState，并返回解析结果
+                        if (readState.getExpectedArgsCount() == 0) {
+                            payLoad.setData(EmptyMultiBulkReply.makeEmptyMultiBuckReply());
+                            readState.resetState();
+                            return payLoad;
+                        }
+
+                        /*  发送'$'，解析头部，开启字符串的多行解析 */
+                    } else if (msg[0] == '$') {
+                        // $4\r\nPING\r\n
+                        parseBulkHeader(msg);
+                        // $-1\r\n
+                        if (readState.getExpectedArgsCount() == 0) {
+                            payLoad.setData(NullBulkReply.makeNullBulkReply());
+                            readState.resetState();
+                            return payLoad;
+                        }
+
+                        /* 剩下的: + - 三种情况 */
+                    } else {
+                        Reply reply = parseSingleLineReply(msg);
+                        payLoad.setData(reply);
                         readState.resetState();
                         return payLoad;
                     }
 
-                    /*  发送'$'，解析头部，开启字符串的多行解析 */
-                } else if (msg[0] == '$') {
-                    // $4\r\nPING\r\n
-                    parseBulkHeader(msg);
-                    // $-1\r\n
-                    if (readState.getExpectedArgsCount() == 0) {
-                        payLoad.setData(NullBulkReply.makeNullBulkReply());
-                        readState.resetState();
-                        return payLoad;
-                    }
-
-                    /* 剩下的: + - 三种情况 */
+                    /* 多行模式 */
                 } else {
-                    Reply reply = parseSingleLineReply(msg);
-                    payLoad.setData(reply);
-                    readState.resetState();
-                    return payLoad;
-                }
-
-                /* 多行模式 */
-            } else {
-                readBody(msg);
-                if (readState.finished()) {
-                    Reply result = null;
-                    if (readState.getMsgType() == RespConstant.MULTI_BULK) {
-                        result = MultiBulkReply.makeMultiBulkReply(readState.getArgs());
-                    } else if (readState.getMsgType() == RespConstant.BULK) {
-                        result = BulkReply.makeBulkReply(readState.getArgs()[0]);
+                    readBody(msg);
+                    if (readState.finished()) {
+                        Reply result = null;
+                        if (readState.getMsgType() == RespConstant.MULTI_BULK) {
+                            result = MultiBulkReply.makeMultiBulkReply(readState.getArgs());
+                        } else if (readState.getMsgType() == RespConstant.BULK) {
+                            result = BulkReply.makeBulkReply(readState.getArgs()[0]);
+                        }
+                        payLoad.setData(result);
                     }
-                    payLoad.setData(result);
                 }
+            } catch (Exception e) {
+                // 出错了，设置错误，等待下一步处理，并且初始化readState等待下一次IO
+                e.printStackTrace();
                 readState.resetState();
+                payLoad.setException((DecodeException) e);
                 return payLoad;
             }
-        } catch (Exception e) {
-            // 出错了，设置错误，等待下一步处理，并且初始化readState等待下一次IO
-            readState.resetState();
-            payLoad.setException((DecodeException) e);
-            return payLoad;
         }
         readState.resetState();
         return payLoad;
@@ -129,8 +130,9 @@ public class Parser extends ByteToMessageDecoder {
             if (index == -1) {
                 throw new DecodeException("protocol error: " + "no end byte '\n'");
             }
-            msg = new byte[index + 1];
+            msg = new byte[index - data.readerIndex() + 1];
             data.readBytes(msg);
+            data.readerIndex();
             // 如果\n前面不是\r，也是协议错误了
             if (msg.length < 2 || msg[msg.length - 2] != '\r') {
                 throw new DecodeException("protocol error: " + new String(msg));
@@ -141,6 +143,8 @@ public class Parser extends ByteToMessageDecoder {
                 throw new DecodeException("protocol error");
             }
             msg = new byte[readState.getBulkLen() + 2];
+            data.readBytes(msg);
+            data.markReaderIndex();
             // 结尾必须是\r\n
             if (msg[msg.length - 1] != '\r' || msg[msg.length - 2] != '\r') {
                 throw new DecodeException("protocol error");
@@ -156,11 +160,11 @@ public class Parser extends ByteToMessageDecoder {
      */
     private void parseMultiBulkHeader(byte[] msg) {
         byte[] numByte = new byte[msg.length - 3];
-        System.arraycopy(msg, 0, numByte, 0, numByte.length);
+        System.arraycopy(msg, 1, numByte, 0, numByte.length);
 
         try {
             int expectedLine = Integer.parseInt(new String(numByte, SystemConfig.SYSTEM_CHARSET));
-            readState.setBulkLen(expectedLine);
+//            readState.setBulkLen(expectedLine);
             if (expectedLine == 0) {
                 readState.setExpectedArgsCount(expectedLine);
             } else if (expectedLine > 0) {
