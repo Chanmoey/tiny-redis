@@ -3,6 +3,7 @@ package com.moon.tinyredis.resp.command;
 import com.moon.tinyredis.resp.command.keys.*;
 import com.moon.tinyredis.resp.command.ping.Ping;
 import com.moon.tinyredis.resp.command.string.Get;
+import com.moon.tinyredis.resp.command.string.Set;
 
 import java.util.HashMap;
 
@@ -47,5 +48,6 @@ public class CommandTable {
 
         // string类型的指令
         commandTable.register("get", new Get(1));
+        commandTable.register("set", new Set(2));
     }
 }
