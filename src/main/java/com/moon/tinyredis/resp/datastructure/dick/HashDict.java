@@ -68,7 +68,7 @@ public class HashDict implements Dict {
         if (map.size() >= limitSize) {
             return 0;
         }
-        return map.putIfAbsent(key, value) == null ? 0 : 1;
+        return map.putIfAbsent(key, value) == null ? 1 : 0;
     }
 
     @Override
