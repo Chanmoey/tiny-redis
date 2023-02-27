@@ -13,8 +13,7 @@ public class CommandTable {
 
     private static final CommandTable INSTANCE = new CommandTable();
 
-    public CommandTable() {
-        initTable();
+    private CommandTable() {
     }
 
     public static CommandTable getCommandTable() {

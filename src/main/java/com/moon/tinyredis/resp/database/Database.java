@@ -1,6 +1,7 @@
 package com.moon.tinyredis.resp.database;
 
 import com.moon.tinyredis.resp.command.CommandLine;
+import com.moon.tinyredis.resp.command.CommandTable;
 import com.moon.tinyredis.resp.parser.Message;
 import com.moon.tinyredis.resp.reply.Reply;
 import com.moon.tinyredis.resp.reply.error.CommonErrorReply;
@@ -31,6 +32,9 @@ public class Database implements IDatabase {
         for (int i = 0; i < 16; i++) {
             dbs[i] = new DB(i);
         }
+
+        // 初始化指令集
+        CommandTable.initTable();
     }
 
     public static IDatabase getInstance() {
