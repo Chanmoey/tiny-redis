@@ -45,3 +45,5 @@ int(Integer)，来记录RESP数据的长度。
 
 所以Netty传输的数据格式就是：RESPLength + RESP。
 
+## TinyRedis业务处理流程
+![tiny-redis处理流程.png](asset/tiny-redis处理流程.png)
