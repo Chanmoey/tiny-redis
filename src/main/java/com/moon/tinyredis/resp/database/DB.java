@@ -33,7 +33,7 @@ public class DB {
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
 
     /**
-     * 指令错误回复线程池
+     * 指令回复线程池
      */
     private static final Executor RESPONSE_EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -56,9 +56,16 @@ public class DB {
      * <p>
      * 如果不是这样，网络IO相关的事件和其他业务事件要分开，不要让业务阻塞了Netty的网络IO，造成延迟
      */
-    private void execCommand(Connection connection, CommandLine commandLine) {
+    public void execCommand(Connection connection, CommandLine commandLine) {
         EXECUTOR.execute(() -> {
             Channel channel = connection.getChannel();
+
+            if (connection.getDBIndex() != this.index) {
+                Reply errorIdx = CommonErrorReply.makeCommonErrorReply("error db index");
+                response(channel, errorIdx);
+                return;
+            }
+
             String commandName = new String(commandLine.getCommand(), SystemConfig.SYSTEM_CHARSET);
             Command command = COMMAND_TABLE.getCommand(commandName);
             if (command == null) {

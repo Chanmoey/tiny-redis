@@ -3,8 +3,6 @@ package com.moon.tinyredis.resp.reply;
 import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.reply.constant.NullBulkReply;
 
-import java.util.Arrays;
-
 /**
  * @author Chanmoey
  * @date 2023年02月20日
@@ -12,6 +10,10 @@ import java.util.Arrays;
 public class MultiBulkReply implements Reply {
 
     private final byte[][] args;
+
+    public byte[][] getArgs() {
+        return args;
+    }
 
     public MultiBulkReply(byte[][] args) {
         this.args = args;
