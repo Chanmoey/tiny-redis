@@ -12,6 +12,10 @@ public class BulkValue extends AbstractValue{
 
     private byte[] bulk;
 
+    public byte[] getBulk() {
+        return bulk;
+    }
+
     @Override
     public int hashCode() {
         return new String(bulk, SystemConfig.SYSTEM_CHARSET).hashCode();

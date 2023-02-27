@@ -2,6 +2,7 @@ package com.moon.tinyredis.resp.command;
 
 import com.moon.tinyredis.resp.command.keys.*;
 import com.moon.tinyredis.resp.command.ping.Ping;
+import com.moon.tinyredis.resp.command.string.Get;
 
 import java.util.HashMap;
 
@@ -43,5 +44,8 @@ public class CommandTable {
         commandTable.register("rename", new Rename(2));
         commandTable.register("renamenx", new RenameNX(2));
         commandTable.register("keys", new Keys(1));
+
+        // string类型的指令
+        commandTable.register("get", new Get(1));
     }
 }
