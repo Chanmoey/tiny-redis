@@ -13,6 +13,10 @@ public class CommandTable {
 
     private static final CommandTable INSTANCE = new CommandTable();
 
+    public CommandTable() {
+        initTable();
+    }
+
     public static CommandTable getCommandTable() {
         return INSTANCE;
     }
@@ -40,6 +44,5 @@ public class CommandTable {
         commandTable.register("rename", new Rename(2));
         commandTable.register("renamenx", new RenameNX(2));
         commandTable.register("keys", new Keys(1));
-
     }
 }

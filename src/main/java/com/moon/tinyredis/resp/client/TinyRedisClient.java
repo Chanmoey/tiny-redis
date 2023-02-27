@@ -49,7 +49,6 @@ public class TinyRedisClient {
                     bytes[i] = strings[i].getBytes();
                 }
                 byte[] resp = MultiBulkReply.makeMultiBulkReply(bytes).toBytes();
-                System.out.println(new String(resp));
                 ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer(resp.length + 4);
                 byteBuf.writeInt(resp.length);
                 byteBuf.writeBytes(resp);
