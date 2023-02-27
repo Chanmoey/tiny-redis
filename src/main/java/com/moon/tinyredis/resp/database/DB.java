@@ -1,6 +1,6 @@
 package com.moon.tinyredis.resp.database;
 
-import com.moon.tinyredis.resp.Connection;
+import com.moon.tinyredis.resp.session.Connection;
 import com.moon.tinyredis.resp.command.Command;
 import com.moon.tinyredis.resp.command.CommandLine;
 import com.moon.tinyredis.resp.command.CommandTable;

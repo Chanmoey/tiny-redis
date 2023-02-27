@@ -1,4 +1,4 @@
-package com.moon.tinyredis.resp;
+package com.moon.tinyredis.resp.session;
 
 import io.netty.channel.Channel;
 
@@ -15,9 +15,19 @@ public class Connection {
         this.channel = channel;
     }
 
-    protected int dbIndex;
+    /**
+     * 本次客户端连接所操作的数据库
+     */
+    private int dbIndex;
 
-    protected Channel channel;
+    /**
+     * Channel
+     */
+    private final Channel channel;
+
+    public void close() {
+        this.channel.close();
+    }
 
     public int getDBIndex() {
         return dbIndex;
