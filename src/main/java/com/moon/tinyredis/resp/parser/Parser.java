@@ -128,26 +128,26 @@ public class Parser extends ByteToMessageDecoder {
             int index = data.forEachByte(ByteProcessor.FIND_LF);
             // 找到末尾都没找到\n，肯定是协议错误了
             if (index == -1) {
-                throw new DecodeException("protocol error: " + "no end byte '\n'");
+                throw new DecodeException(RespConstant.PROTOCOL_ERROR + "no end byte '\n'");
             }
             msg = new byte[index - data.readerIndex() + 1];
             data.readBytes(msg);
             data.readerIndex();
             // 如果\n前面不是\r，也是协议错误了
             if (msg.length < 2 || msg[msg.length - 2] != '\r') {
-                throw new DecodeException("protocol error: " + new String(msg));
+                throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg));
             }
         } else {
             // 按照特定长度去读
             if (data.readableBytes() < readState.getBulkLen() + 2) {
-                throw new DecodeException("protocol error");
+                throw new DecodeException(RespConstant.PROTOCOL_ERROR + "buck length out of readable bytes");
             }
             msg = new byte[readState.getBulkLen() + 2];
             data.readBytes(msg);
             data.markReaderIndex();
             // 结尾必须是\r\n
             if (msg[msg.length - 1] != '\r' || msg[msg.length - 2] != '\r') {
-                throw new DecodeException("protocol error");
+                throw new DecodeException(RespConstant.PROTOCOL_ERROR + "must end with \r\n");
             }
             readState.setBulkLen(0);
         }
@@ -164,21 +164,20 @@ public class Parser extends ByteToMessageDecoder {
 
         try {
             int expectedLine = Integer.parseInt(new String(numByte, SystemConfig.SYSTEM_CHARSET));
-//            readState.setBulkLen(expectedLine);
             if (expectedLine == 0) {
                 readState.setExpectedArgsCount(expectedLine);
             } else if (expectedLine > 0) {
                 // 设置解析器状态，标记正在读多行
-               readState.setMsgType(msg[0]);
-               readState.setExpectedArgsCount(expectedLine);
+                readState.setMsgType(msg[0]);
+                readState.setExpectedArgsCount(expectedLine);
                 readState.setReadingMultiLine(true);
                 readState.setArgs(new byte[expectedLine][]);
             } else {
                 // < 0 错误
-                throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+                throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg, SystemConfig.SYSTEM_CHARSET));
             }
         } catch (Exception e) {
-            throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+            throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg, SystemConfig.SYSTEM_CHARSET));
         }
     }
 
@@ -197,10 +196,10 @@ public class Parser extends ByteToMessageDecoder {
                 readState.setExpectedArgsCount(1);
                 readState.setArgs(new byte[1][]);
             } else {
-                throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+                throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg, SystemConfig.SYSTEM_CHARSET));
             }
         } catch (Exception e) {
-            throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+            throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg, SystemConfig.SYSTEM_CHARSET));
         }
     }
 
@@ -218,10 +217,11 @@ public class Parser extends ByteToMessageDecoder {
                     int val = Integer.parseInt(str.substring(1));
                     result = IntegerReply.makeStatusReply(val);
                 } catch (Exception e) {
-                    throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+                    throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg, SystemConfig.SYSTEM_CHARSET));
                 }
             }
-            default -> throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+            default ->
+                    throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg, SystemConfig.SYSTEM_CHARSET));
         }
         return result;
     }
@@ -247,7 +247,7 @@ public class Parser extends ByteToMessageDecoder {
                     readState.setBulkLen(0);
                 }
             } catch (Exception e) {
-                throw new DecodeException("protocol error: " + new String(msg, SystemConfig.SYSTEM_CHARSET));
+                throw new DecodeException(RespConstant.PROTOCOL_ERROR + new String(msg, SystemConfig.SYSTEM_CHARSET));
             }
         } else {
             readState.appendArg(line);

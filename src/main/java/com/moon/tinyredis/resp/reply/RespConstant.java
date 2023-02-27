@@ -2,15 +2,14 @@ package com.moon.tinyredis.resp.reply;
 
 import com.moon.tinyredis.resp.config.SystemConfig;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author Chanmoey
  * @date 2023年02月20日
  */
 public class RespConstant {
 
-    private RespConstant(){}
+    private RespConstant() {
+    }
 
     public static final byte OK = '+';
 
@@ -32,4 +31,6 @@ public class RespConstant {
     public static final byte LF = (byte) '\n';
     public static final String CRLF = "\r\n";
     public static final byte[] CRLF_BYTE = "\r\n".getBytes(SystemConfig.SYSTEM_CHARSET);
+    
+    public static final String PROTOCOL_ERROR = "RespConstan.PROTOCOL_ERROR ";
 }

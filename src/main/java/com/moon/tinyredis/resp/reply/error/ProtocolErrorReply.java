@@ -2,13 +2,11 @@ package com.moon.tinyredis.resp.reply.error;
 
 import com.moon.tinyredis.resp.config.SystemConfig;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author Chanmoey
  * @date 2023年02月20日
  */
-public class ProtocolErrorReply extends AbstractErrorReplay{
+public class ProtocolErrorReply extends AbstractErrorReplay {
 
     private final String msg;
 
