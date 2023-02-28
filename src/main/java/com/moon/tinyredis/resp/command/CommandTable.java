@@ -3,6 +3,7 @@ package com.moon.tinyredis.resp.command;
 import com.moon.tinyredis.resp.command.keys.*;
 import com.moon.tinyredis.resp.command.ping.Ping;
 import com.moon.tinyredis.resp.command.string.Get;
+import com.moon.tinyredis.resp.command.string.GetSet;
 import com.moon.tinyredis.resp.command.string.Set;
 import com.moon.tinyredis.resp.command.string.SetNX;
 
@@ -51,6 +52,6 @@ public class CommandTable {
         commandTable.register("get", new Get(1));
         commandTable.register("set", new Set(2));
         commandTable.register("setnx", new SetNX(2));
-
+        commandTable.register("getset", new GetSet(2));
     }
 }
