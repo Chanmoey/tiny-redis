@@ -6,6 +6,7 @@ import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.parser.Message;
 import com.moon.tinyredis.resp.reply.Reply;
 import com.moon.tinyredis.resp.reply.constant.OkReply;
+import com.moon.tinyredis.resp.reply.error.ArgNumberErrorReply;
 import com.moon.tinyredis.resp.reply.error.CommonErrorReply;
 import com.moon.tinyredis.resp.session.Connection;
 import io.netty.buffer.ByteBuf;
@@ -82,8 +83,11 @@ public class Database implements IDatabase {
     @Override
     public Reply select(Connection connection, CommandLine commandLine) {
         try {
+            if (commandLine.getArgs().length != 1) {
+                return ArgNumberErrorReply.makeArgNumberErrorReply("select");
+            }
             int dbIndex = Integer.parseInt(new String(commandLine.getArgs()[0], SystemConfig.SYSTEM_CHARSET));
-            if (dbIndex < 0 || dbIndex > 16) {
+            if (dbIndex < 0 || dbIndex >= DB_COUNT) {
                 return CommonErrorReply.makeCommonErrorReply("err db index is out of range");
             }
             connection.selectDB(dbIndex);
