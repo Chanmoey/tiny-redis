@@ -39,7 +39,11 @@ public class CommandTable {
 
     public static void initTable() {
         CommandTable commandTable = CommandTable.getCommandTable();
+
+        // 通信指令
         commandTable.register("ping", new Ping(0));
+
+        // key类型的指令
         commandTable.register("del", new Del(-1));
         commandTable.register("exists", new Exists(-1));
         commandTable.register("flushdb", new FlushDB(0));
@@ -53,5 +57,7 @@ public class CommandTable {
         commandTable.register("set", new Set(2));
         commandTable.register("setnx", new SetNX(2));
         commandTable.register("getset", new GetSet(2));
+        commandTable.register("strlen", new GetSet(1));
+
     }
 }
