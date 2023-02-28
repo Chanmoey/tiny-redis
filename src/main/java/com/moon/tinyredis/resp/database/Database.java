@@ -2,8 +2,10 @@ package com.moon.tinyredis.resp.database;
 
 import com.moon.tinyredis.resp.command.CommandLine;
 import com.moon.tinyredis.resp.command.CommandTable;
+import com.moon.tinyredis.resp.config.SystemConfig;
 import com.moon.tinyredis.resp.parser.Message;
 import com.moon.tinyredis.resp.reply.Reply;
+import com.moon.tinyredis.resp.reply.constant.OkReply;
 import com.moon.tinyredis.resp.reply.error.CommonErrorReply;
 import com.moon.tinyredis.resp.session.Connection;
 import io.netty.buffer.ByteBuf;
@@ -49,7 +51,15 @@ public class Database implements IDatabase {
                 response(connection, CommonErrorReply.makeCommonErrorReply("illegal db"));
                 return;
             }
-            // TODO：处理select 0
+
+            // select指令由DataBase处理即可
+            if ("select".equalsIgnoreCase(new String(commandLine.getCommand(), SystemConfig.SYSTEM_CHARSET))) {
+                Reply select = select(connection, commandLine);
+                response(connection, select);
+                return;
+            }
+
+            // 其他指令交由具体的DB进行处理
             dbs[idx].execCommand(connection, commandLine);
         });
     }
@@ -67,5 +77,19 @@ public class Database implements IDatabase {
 
     @Override
     public void afterClientClose(Connection connection) {
+    }
+
+    @Override
+    public Reply select(Connection connection, CommandLine commandLine) {
+        try {
+            int dbIndex = Integer.parseInt(new String(commandLine.getArgs()[0], SystemConfig.SYSTEM_CHARSET));
+            if (dbIndex < 0 || dbIndex > 16) {
+                return CommonErrorReply.makeCommonErrorReply("err db index is out of range");
+            }
+            connection.selectDB(dbIndex);
+            return OkReply.makeOkReplay();
+        } catch (Exception e) {
+            return CommonErrorReply.makeCommonErrorReply("err invalid db index");
+        }
     }
 }

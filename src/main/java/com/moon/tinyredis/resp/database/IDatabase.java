@@ -1,6 +1,7 @@
 package com.moon.tinyredis.resp.database;
 
 import com.moon.tinyredis.resp.command.CommandLine;
+import com.moon.tinyredis.resp.reply.Reply;
 import com.moon.tinyredis.resp.session.Connection;
 
 /**
@@ -14,4 +15,6 @@ public interface IDatabase {
     void close();
 
     void afterClientClose(Connection connection);
+
+    Reply select(Connection connection, CommandLine commandLine);
 }
