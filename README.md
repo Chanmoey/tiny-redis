@@ -47,3 +47,9 @@ int(Integer)，来记录RESP数据的长度。
 
 ## TinyRedis业务处理流程
 ![tiny-redis处理流程.png](asset/tiny-redis处理流程.png)
+
+## TinyRedis演示
+
+[PING指令演示](https://www.bilibili.com/video/BV16s4y1f7kc/?spm_id_from=..search-card.all.click&vd_source=257da39ff1cc5182db0906794ea0cb5d)
+
+[SET、GET、SETNX指令演示](https://www.bilibili.com/video/BV1b84y1E7w4/?spm_id_from=..search-card.all.click&vd_source=257da39ff1cc5182db0906794ea0cb5d)
