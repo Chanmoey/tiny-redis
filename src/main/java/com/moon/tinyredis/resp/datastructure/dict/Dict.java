@@ -1,4 +1,4 @@
-package com.moon.tinyredis.resp.datastructure.dick;
+package com.moon.tinyredis.resp.datastructure.dict;
 
 import com.moon.tinyredis.resp.datastructure.value.Value;
 

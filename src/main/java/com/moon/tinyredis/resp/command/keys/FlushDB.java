@@ -15,7 +15,7 @@ public class FlushDB extends Command {
     }
 
     /**
-     * 指令能直接调用Dick的方法吗？要不要在DB里面封装一层？
+     * 指令能直接调用Dict的方法吗？要不要在DB里面封装一层？
      */
     @Override
     public Reply exec(DB db, byte[][] args) {
